@@ -1,0 +1,42 @@
+<local:BaseWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:local="clr-namespace:
+		.UI.Windows"
+        x:Class="AvaloniaToolbox.UI.MessageBox" 
+		SizeToContent="WidthAndHeight" 
+		CanResize="False">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+		<StackPanel Orientation="Horizontal" Margin="24" Spacing="8">
+			<Image Name="AlertIcon" IsVisible="False" Width="32" Height="32"/>
+			<TextBlock Name="Text" Margin="8" FontSize="14" IsVisible="True"/>
+            
+		</StackPanel>
+		<Image Name="DialogImage" Margin="8" IsVisible="False" VerticalAlignment="Center"/>
+        <TextBox Name="TextEntry" Margin="8" IsVisible="False" UseFloatingWatermark="True" VerticalAlignment="Center"/>
+
+        <Grid Name="ComboBoxGrid" Margin="2" IsVisible="False" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock VerticalAlignment="Center" Name="ComboBoxLabel" FontSize="14" Grid.Column="0"  IsVisible="False" Margin="8"/>
+            <ComboBox VerticalContentAlignment="Center" VerticalAlignment="Center" Name="ComboBox" MinHeight="30" Grid.Column="1" MinWidth="75"  IsVisible="False" Margin="8"/>
+        </Grid>
+
+        <ProgressBar Name="ProgressBar" IsIndeterminate="True" IsVisible="False" Margin="8" MinWidth="100" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Name="Buttons" Margin="32,0,32,0">
+            <StackPanel.Styles>
+                <Style Selector="Button">
+                    <Setter Property="Margin" Value="8"/>
+                </Style>
+            </StackPanel.Styles>
+
+        </StackPanel>
+    </StackPanel>
+</local:BaseWindow>
+
