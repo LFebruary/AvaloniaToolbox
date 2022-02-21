@@ -4,17 +4,17 @@ using Avalonia.Media;
 using Avalonia.ReactiveUI;
 using AvaloniaToolbox.ViewModel;
 using AvaloniaToolbox.Functions;
-using AvaloniaToolbox.UI.CustomIcons;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace AvaloniaToolbox.UI.Windows
 {
-    public class BaseWindow : ReactiveWindow<BaseViewModel>
+    public class BaseWindow : ReactiveWindow<BaseViewModel>, INotifyPropertyChanged
     {
         protected bool _isReleasable = true;
         public BaseWindow()
         {
             WindowStartupLocation   = WindowStartupLocation.CenterScreen;
-            SizeToContent           = SizeToContent.WidthAndHeight;
             Opened                  += Window_Opened;
 
             if (CustomDebug.IsDebug)
@@ -46,6 +46,51 @@ namespace AvaloniaToolbox.UI.Windows
                     Close();
                 });
             }
+        }
+
+         public event PropertyChangedEventHandler? PropertyChangedHandler;
+
+        event PropertyChangedEventHandler? INotifyPropertyChanged.PropertyChanged
+        {
+            add
+            {
+                PropertyChangedHandler += value;
+            }
+
+            remove
+            {
+                PropertyChangedHandler -= value;
+            }
+        }
+        
+        protected virtual void OnPropertyChanged([CallerMemberName]string? propertyName = "")
+        {
+            PropertyChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string? propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                OnPropertyChanged(propertyName);
+                return true;
+            }
+
+            return false;
+        }
+
+        protected bool SetProperty<T>(ref T field, T newValue, Action onChanged, [CallerMemberName] string? propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                OnPropertyChanged(propertyName);
+                onChanged();
+                return true;
+            }
+
+            return false;
         }
     }
 }

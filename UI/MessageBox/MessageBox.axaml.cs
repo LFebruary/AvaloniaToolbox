@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using AvaloniaToolbox.Functions;
-using AvaloniaToolbox.UI.CustomIcons;
 using AvaloniaToolbox.UI.Windows;
 using Color = Avalonia.Media.Color;
 using Image = Avalonia.Controls.Image;
@@ -197,7 +196,7 @@ namespace AvaloniaToolbox.UI
         {
             (TaskCompletionSource<bool> taskCompletionSource, MessageBox messageBox) = CreateBoolMessageBox(parent, title, message);
 
-            messageBox.FindControl<Image>("AlertIcon").Source       = Icons.GenerateIcon(icontype, color ?? Colors.White);
+            messageBox.FindControl<Image>("AlertIcon").Source       = CustomIcon.GenerateIcon(icontype, color ?? Colors.White);
             messageBox.FindControl<Image>("AlertIcon").IsVisible    = true;
             messageBox.AddButton(button, true, true);
 
@@ -234,9 +233,9 @@ namespace AvaloniaToolbox.UI
             }
         }
 
-        private static readonly DrawingImage s_error     = Icons.GenerateIcon(CustomIconType.ErrorCircular, Colors.Red);
-        private static readonly DrawingImage s_warning = Icons.GenerateIcon(CustomIconType.WarningTriangular, Colors.Orange);
-        private static readonly DrawingImage s_success   = Icons.GenerateIcon(CustomIconType.CheckCircular, Colors.Lime);
+        private static readonly DrawingImage s_error    = CustomIcon.GenerateIcon(CustomIconType.ErrorCircular, Colors.Red);
+        private static readonly DrawingImage s_warning  = CustomIcon.GenerateIcon(CustomIconType.WarningTriangular, Colors.Orange);
+        private static readonly DrawingImage s_success  = CustomIcon.GenerateIcon(CustomIconType.CheckCircular, Colors.Lime);
 
         public static async Task<bool> Show(Window? owner, Exception error, string? buttonText = null) => await Show(owner, "Error", error.Message, buttonText ?? "Exit");
 

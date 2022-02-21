@@ -20,29 +20,39 @@ namespace AvaloniaToolbox.Models
             }
         }
         
-        protected virtual void OnPropertyChanged([CallerMemberName]string? propertyName = "")
+        protected virtual void OnPropertyChanged([CallerMemberName]string? propertyName = "", bool runOnUiThread = false)
         {
-            PropertyChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (runOnUiThread)
+            {
+                Functions.Extensions.RunOnUIThread(() =>
+                {
+                    PropertyChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                }, Avalonia.Threading.DispatcherPriority.DataBind);
+            }
+            else
+            {
+                PropertyChangedHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string? propertyName = null)
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string? propertyName = null, bool runOnUiThread = false)
         {
             if (!Equals(field, newValue))
             {
                 field = newValue;
-                OnPropertyChanged(propertyName);
+                OnPropertyChanged(propertyName, runOnUiThread);
                 return true;
             }
 
             return false;
         }
 
-        protected bool SetProperty<T>(ref T field, T newValue, Action onChanged, [CallerMemberName] string? propertyName = null)
+        protected bool SetProperty<T>(ref T field, T newValue, Action onChanged, [CallerMemberName] string? propertyName = null, bool runOnUiThread = false)
         {
             if (!Equals(field, newValue))
             {
                 field = newValue;
-                OnPropertyChanged(propertyName);
+                OnPropertyChanged(propertyName, runOnUiThread);
                 onChanged();
                 return true;
             }

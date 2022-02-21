@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;
-using AvaloniaToolbox.UI.CustomIcons;
 using static AvaloniaToolbox.Models.SerialConstants;
 using AvaloniaToolbox.Functions;
 using AvaloniaToolbox.UI;
@@ -63,9 +62,6 @@ namespace AvaloniaToolbox.Models
                 OnPropertyChanged(nameof(PortName));
             };
         }
-
-
-
 
         #region Computed properties
         private Func<SerialWrapper, int>? _indexer;

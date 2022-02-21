@@ -60,7 +60,6 @@ namespace AvaloniaToolbox.Functions
         }
         #endregion
 
-
         #region Imaging
 
         /// <summary>

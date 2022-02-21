@@ -1,4 +1,5 @@
-﻿using AvaloniaToolbox.Functions;
+﻿using Avalonia.Threading;
+using AvaloniaToolbox.Functions;
 using AvaloniaToolbox.UI;
 using AvaloniaToolbox.UI.Windows;
 using ReactiveUI;
@@ -66,9 +67,9 @@ namespace AvaloniaToolbox.ViewModel
         #endregion
 
         #region Property changed methods
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) => Extensions.RunOnUIThread(() => this.RaisePropertyChanged(propertyName));
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null, DispatcherPriority? priority = null) => Extensions.RunOnUIThread(() => this.RaisePropertyChanged(propertyName), priority);
 
-        protected void SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
+        protected void SetProperty<T>(ref T storage, T value, DispatcherPriority? priority = null, [CallerMemberName] string? propertyName = null)
         {
             if (Equals(storage, value))
             {
@@ -76,10 +77,10 @@ namespace AvaloniaToolbox.ViewModel
             }
 
             storage = value;
-            Extensions.RunOnUIThread(() => this.RaisePropertyChanged(propertyName));
+            Extensions.RunOnUIThread(() => this.RaisePropertyChanged(propertyName), priority);
         }
 
-        protected void SetProperty<T>(ref T storage, T value, Action onChange, [CallerMemberName] string? propertyName = null)
+        protected void SetProperty<T>(ref T storage, T value, Action onChange, DispatcherPriority? priority = null, [CallerMemberName] string? propertyName = null)
         {
             if (Equals(storage, value))
             {
@@ -87,11 +88,11 @@ namespace AvaloniaToolbox.ViewModel
             }
 
             storage = value;
-            Extensions.RunOnUIThread(() => this.RaisePropertyChanged(propertyName));
+            Extensions.RunOnUIThread(() => this.RaisePropertyChanged(propertyName), priority);
             onChange?.Invoke();
         }
 
-        protected void SetProperty<T>(ref T storage, T value, Action<T> onChange, [CallerMemberName] string? propertyName = null)
+        protected void SetProperty<T>(ref T storage, T value, Action<T> onChange, DispatcherPriority? priority = null, [CallerMemberName] string? propertyName = null)
         {
             if (Equals(storage, value))
             {
@@ -99,7 +100,7 @@ namespace AvaloniaToolbox.ViewModel
             }
 
             storage = value;
-            Extensions.RunOnUIThread(() => this.RaisePropertyChanged(propertyName));
+            Extensions.RunOnUIThread(() => this.RaisePropertyChanged(propertyName), priority);
             onChange?.Invoke(value);
         }
         #endregion
