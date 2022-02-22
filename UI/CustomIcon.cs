@@ -47,33 +47,33 @@ namespace AvaloniaToolbox.UI
         /// <param name="color"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static DrawingImage GenerateIcon(CustomIconType? customIconType, Color color) => customIconType switch
+        public static DrawingImage GenerateIcon(CustomIconType? customIconType, Color color, bool flipHorizontally = false) => customIconType switch
         {
-            CustomIconType.ArrowLeft            => Icon.From(ArrowLeftCircleOutlineGeometry, color),
-            CustomIconType.ArrowRight           => Icon.From(ArrowRightCircleOutlineGeometry, color),
-            CustomIconType.Backspace            => Icon.From(BackspaceOutlineGeometry, color),
-            CustomIconType.Broadcast            => Icon.From(BroadcastGeometry, color),
-            CustomIconType.BroadcastOff         => Icon.From(BroadcastOffGeometry, color),
-            CustomIconType.CheckCircular        => Icon.From(CheckCircleOutlineGeometry, color),
-            CustomIconType.Delete               => Icon.From(DeleteOutlineGeometry, color),
-            CustomIconType.ErrorCircular        => Icon.From(AlertCircleOutlineGeometry, color),
-            CustomIconType.Filter               => Icon.From(FilterGeometry, color),
-            CustomIconType.History              => Icon.From(HistoryGeometry, color),
-            CustomIconType.Info                 => Icon.From(InformationGeometry, color),
-            CustomIconType.LinkedIn             => Icon.From(LinkedInGeometry, color),
-            CustomIconType.Lock                 => Icon.From(LockGeometry, color),
-            CustomIconType.LockOpen             => Icon.From(LockOpenGeometry, color),
-            CustomIconType.Maintenance          => Icon.From(MaintenanceGeometry, color),
-            CustomIconType.Menu                 => Icon.From(HamburgerMenuGeometry, color),
-            CustomIconType.PlusCircular         => Icon.From(PlusCircleOutlineGeometry, color),
-            CustomIconType.QRCode               => Icon.From(QrCodeGeometry, color),
-            CustomIconType.Settings             => Icon.From(SettingsCogGeometry, color),
-            CustomIconType.SettingsSave         => Icon.From(ContentSaveSettingsGeometry, color),
-            CustomIconType.SupportAgent         => Icon.From(SupportFaceGeometry, color),
-            CustomIconType.WarningTriangular    => Icon.From(AlertOutlineGeometry, color),
-            CustomIconType.Web                  => Icon.From(WebGeometry, color),
-            CustomIconType.Restore              => Icon.From(RestoreGeometry, color),
-            CustomIconType.SerialPort           => Icon.From(SerialPortGeometry, color),
+            CustomIconType.ArrowLeft            => Icon.From(ArrowLeftCircleOutlineGeometry, color, flipHorizontally),
+            CustomIconType.ArrowRight           => Icon.From(ArrowRightCircleOutlineGeometry, color, flipHorizontally),
+            CustomIconType.Backspace            => Icon.From(BackspaceOutlineGeometry, color, flipHorizontally),
+            CustomIconType.Broadcast            => Icon.From(BroadcastGeometry, color, flipHorizontally),
+            CustomIconType.BroadcastOff         => Icon.From(BroadcastOffGeometry, color, flipHorizontally),
+            CustomIconType.CheckCircular        => Icon.From(CheckCircleOutlineGeometry, color, flipHorizontally),
+            CustomIconType.Delete               => Icon.From(DeleteOutlineGeometry, color, flipHorizontally),
+            CustomIconType.ErrorCircular        => Icon.From(AlertCircleOutlineGeometry, color, flipHorizontally),
+            CustomIconType.Filter               => Icon.From(FilterGeometry, color, flipHorizontally),
+            CustomIconType.History              => Icon.From(HistoryGeometry, color, flipHorizontally),
+            CustomIconType.Info                 => Icon.From(InformationGeometry, color, flipHorizontally),
+            CustomIconType.LinkedIn             => Icon.From(LinkedInGeometry, color, flipHorizontally),
+            CustomIconType.Lock                 => Icon.From(LockGeometry, color, flipHorizontally),
+            CustomIconType.LockOpen             => Icon.From(LockOpenGeometry, color, flipHorizontally),
+            CustomIconType.Maintenance          => Icon.From(MaintenanceGeometry, color, flipHorizontally),
+            CustomIconType.Menu                 => Icon.From(HamburgerMenuGeometry, color, flipHorizontally),
+            CustomIconType.PlusCircular         => Icon.From(PlusCircleOutlineGeometry, color, flipHorizontally),
+            CustomIconType.QRCode               => Icon.From(QrCodeGeometry, color, flipHorizontally),
+            CustomIconType.Settings             => Icon.From(SettingsCogGeometry, color, flipHorizontally),
+            CustomIconType.SettingsSave         => Icon.From(ContentSaveSettingsGeometry, color, flipHorizontally),
+            CustomIconType.SupportAgent         => Icon.From(SupportFaceGeometry, color, flipHorizontally),
+            CustomIconType.WarningTriangular    => Icon.From(AlertOutlineGeometry, color, flipHorizontally),
+            CustomIconType.Web                  => Icon.From(WebGeometry, color, flipHorizontally),
+            CustomIconType.Restore              => Icon.From(RestoreGeometry, color, flipHorizontally),
+            CustomIconType.SerialPort           => Icon.From(SerialPortGeometry, color, flipHorizontally),
             _ => new DrawingImage(),
         };
 
@@ -84,7 +84,7 @@ namespace AvaloniaToolbox.UI
         /// <param name="color"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static DrawingImage GenerateIcon(string? customGeometry, Color color) => customGeometry == null ? throw new NullReferenceException(nameof(customGeometry)) : Icon.From(customGeometry, color);
+        public static DrawingImage GenerateIcon(string? customGeometry, Color color, bool flipHorizontally = false) => customGeometry == null ? throw new NullReferenceException(nameof(customGeometry)) : Icon.From(customGeometry, color, flipHorizontally);
         #endregion
 
         private class Icon : DrawingImage
@@ -94,17 +94,28 @@ namespace AvaloniaToolbox.UI
             /// </summary>
             /// <param name="geometry">String geometry to draw</param>
             /// <param name="brushColor">Color to draw icon with</param>
-            private Icon(string geometry, Color brushColor, bool flipHorizontally)
+            private Icon(string geometry, Color brushColor, bool flipHorizontally, bool flipVertically = false)
             {
                 Geometry parsedGeometry = Geometry.Parse(geometry);
 
-                //We do this here because FarFulcrum's icon's geometry is reversed
-                if (flipHorizontally)
+                if (flipHorizontally || flipVertically)
                 {
-                    parsedGeometry.Transform = new ScaleTransform
+                    Functions.CustomDebug.WriteLine("Entered transform if-statement");
+                    var transform = new ScaleTransform();
+                    if (flipHorizontally)
                     {
-                        ScaleX = -1
-                    };
+                        Functions.CustomDebug.WriteLine("Flip horizontally");
+                        transform.ScaleX = -1;
+                    }
+
+                    if (flipVertically)
+                    {
+                        Functions.CustomDebug.WriteLine("Flip vertically");
+                        transform.ScaleY = -1;
+                    }
+
+                    Functions.CustomDebug.WriteLine("Apply transform");
+                    parsedGeometry.Transform = transform;
                 }
 
                 Drawing = new GeometryDrawing()
@@ -155,24 +166,53 @@ namespace AvaloniaToolbox.UI
         }
 
 
-        public static readonly AttachedProperty<CustomIconType> IconKindProperty =
-    AvaloniaProperty.RegisterAttached<CustomIcon, Interactive, CustomIconType>(
+        public static readonly AttachedProperty<CustomIconType?> IconKindProperty =
+    AvaloniaProperty.RegisterAttached<CustomIcon, Interactive, CustomIconType?>(
         nameof(IconKind),
-        CustomIconType.None,
+        null,
         false,
         Avalonia.Data.BindingMode.OneWay);
 
-        private CustomIconType _iconKind;
-        public CustomIconType IconKind
+        private CustomIconType? _iconKind;
+        public CustomIconType? IconKind
         {
             get => _iconKind;
             set => SetAndRaise(IconKindProperty, ref _iconKind, value);
         }
 
+        public static readonly AttachedProperty<string?> IconGeometryProperty =
+    AvaloniaProperty.RegisterAttached<CustomIcon, Interactive, string?>(
+        nameof(IconGeometry),
+        null,
+        false,
+        Avalonia.Data.BindingMode.OneWay);
+
+        private string? _iconGeometry;
+        public string? IconGeometry
+        {
+            get => _iconGeometry;
+            set => SetAndRaise(IconGeometryProperty, ref _iconGeometry, value);
+        }
+
         /// <summary>
         /// This takes current instance's color and icon type and regenerates icon
         /// </summary>
-        private void RedrawIcon() => Dispatcher.UIThread.Post(() => Source = GenerateIcon(IconKind, Color), DispatcherPriority.Render);
+        private void RedrawIcon() => Dispatcher.UIThread.Post(() =>
+        {
+            if (IconGeometry is not null)
+            {
+                Source = GenerateIcon(IconGeometry, Color, FlipHorizontally);
+            }
+            else if (IconKind is not null)
+            {
+                Source = GenerateIcon(IconKind, Color, FlipHorizontally);
+            }
+            else
+            {
+                Source = null;
+            }
+        }, DispatcherPriority.Render);
+
 
         public static readonly AttachedProperty<Color> ColorProperty =
     AvaloniaProperty.RegisterAttached<CustomIcon, Interactive, Color>(
@@ -189,14 +229,50 @@ namespace AvaloniaToolbox.UI
             set => SetAndRaise(ColorProperty, ref _color, value);
         }
 
+        public static readonly AttachedProperty<bool> FlipHorizontallyProperty =
+    AvaloniaProperty.RegisterAttached<CustomIcon, Interactive, bool>(
+        nameof(FlipHorizontally),
+        false,
+        false,
+        Avalonia.Data.BindingMode.OneWay,
+        null);
+
+        private bool _flipHorizontally = false;
+        public bool FlipHorizontally
+        {
+            get => _flipHorizontally;
+            set => SetAndRaise(FlipHorizontallyProperty, ref _flipHorizontally, value);
+        }
+
         public CustomIcon()
         {
             MinHeight = 18;
 
             PointerEnter += CustomIcon_PointerEnter;
             PointerLeave += CustomIcon_PointerLeave;
+            _ = IconGeometryProperty.Changed.Subscribe(x => HandleIconGeometryChanged(x.Sender, x.NewValue.GetValueOrDefault<string>()));
+            _ = FlipHorizontallyProperty.Changed.Subscribe(x => HandleFlipPropertiesChanged(x.Sender, x.NewValue.GetValueOrDefault<bool>(), true));
             _ = ColorProperty.Changed.Subscribe(x => HandleColorChanged(x.Sender, x.NewValue.GetValueOrDefault<Color>));
             _ = IconKindProperty.Changed.Subscribe(x => HandleIconKindChanged(x.Sender, x.NewValue.GetValueOrDefault<CustomIconType>));
+        }
+
+        private static void HandleFlipPropertiesChanged(IAvaloniaObject sender, bool flip, bool horizontal)
+        {
+            if (sender is CustomIcon icon && flip && icon.IconGeometry is not null)
+            {
+                Functions.CustomDebug.WriteLine("About to redraw flipped icon");
+                icon.FlipHorizontally = flip;
+                icon.RedrawIcon();
+            }
+        }
+
+        private static void HandleIconGeometryChanged(IAvaloniaObject sender, string? geo)
+        {
+            if (sender is CustomIcon icon && geo is not null)
+            {
+                icon.IconGeometry = geo;
+                icon.RedrawIcon();
+            }
         }
 
         private static void HandleColorChanged(IAvaloniaObject sender, Func<Color> getValueOrDefault)

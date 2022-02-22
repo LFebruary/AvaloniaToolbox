@@ -8,7 +8,7 @@ using Image = Avalonia.Controls.Image;
 
 namespace AvaloniaToolbox.UI
 {
-    public partial class MessageBox : BaseWindow
+    public partial class MessageBox : TopLevelBaseWindow
     {
         public MessageBox()
         {

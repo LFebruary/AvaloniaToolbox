@@ -29,10 +29,6 @@
         /// </summary>
         ErrorCircular,
         /// <summary>
-        /// Farfulcrum icon for use throughout application
-        /// </summary>
-        FarFulcrumIcon,
-        /// <summary>
         /// A funnel symbol to symbolize a <see href="https://materialdesignicons.com/icon/filter">filter icon</see>
         /// </summary>
         Filter,

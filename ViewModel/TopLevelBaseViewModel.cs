@@ -8,10 +8,10 @@ using static AvaloniaToolbox.UI.MessageBox;
 
 namespace AvaloniaToolbox.ViewModel
 {
-    public class BaseViewModel : ReactiveObject
+    public class TopLevelBaseViewModel : ReactiveObject
     {
         #region Constructor
-        public BaseViewModel(BaseWindow parentView)
+        public TopLevelBaseViewModel(TopLevelBaseWindow parentView)
         {
             _parentView = parentView;
 
@@ -63,7 +63,7 @@ namespace AvaloniaToolbox.ViewModel
         }
 
         #region Fields
-        public BaseWindow _parentView;
+        public TopLevelBaseWindow _parentView;
         #endregion
 
         #region Property changed methods
@@ -106,7 +106,7 @@ namespace AvaloniaToolbox.ViewModel
         #endregion
 
         #region Dialogs
-        internal async Task<bool> ShowDialog(DialogType messageBoxType, string message, string positive = "OK", string negative = "Cancel", string overrideTitle = "")
+        protected async Task<bool> ShowDialog(DialogType messageBoxType, string message, string positive = "OK", string negative = "Cancel", string overrideTitle = "")
         {
             string title = string.IsNullOrWhiteSpace(overrideTitle)
                 ? messageBoxType.ToString()
@@ -121,7 +121,7 @@ namespace AvaloniaToolbox.ViewModel
             );
         }
 
-        internal async Task<bool> ShowDialog(DialogType messageBoxType, string message, string positive, string negative, Action onDismiss, string overrideTitle = "")
+        protected async Task<bool> ShowDialog(DialogType messageBoxType, string message, string positive, string negative, Action onDismiss, string overrideTitle = "")
         {
             string title = string.IsNullOrWhiteSpace(overrideTitle)
                 ? messageBoxType.ToString()
@@ -137,7 +137,7 @@ namespace AvaloniaToolbox.ViewModel
             );
         }
 
-        internal async Task<bool?> ShowDialog(DialogType messageBoxType, string message, string positive, string negative, string neutral, string overrideTitle = "")
+        protected async Task<bool?> ShowDialog(DialogType messageBoxType, string message, string positive, string negative, string neutral, string overrideTitle = "")
         {
             string title = string.IsNullOrWhiteSpace(overrideTitle)
                 ? messageBoxType.ToString()
@@ -153,7 +153,7 @@ namespace AvaloniaToolbox.ViewModel
             );
         }
 
-        internal async Task<bool?> ShowDialog(DialogType messageBoxType, string message, string positive, string negative, Action onDismiss, string neutral, string overrideTitle = "")
+        protected async Task<bool?> ShowDialog(DialogType messageBoxType, string message, string positive, string negative, Action onDismiss, string neutral, string overrideTitle = "")
         {
             string title = string.IsNullOrWhiteSpace(overrideTitle)
                 ? messageBoxType.ToString()
@@ -170,38 +170,38 @@ namespace AvaloniaToolbox.ViewModel
             );
         }
 
-        internal async Task ShowDialog(Exception e, string? buttonText = null)
+        protected async Task ShowDialog(Exception e, string? buttonText = null)
         {
             _ = await Extensions.RunOnUIThread(() => Show(_parentView, e, buttonText));
         }
 
-        internal async Task ShowDialog(Avalonia.Media.Imaging.Bitmap bitmap)
+        protected async Task ShowDialog(Avalonia.Media.Imaging.Bitmap bitmap)
         {
             await Extensions.InvokeOnUiThread(Show(_parentView, bitmap));
         }
 
-        internal async Task ShowDialog(Task runningTask, string title, string prompt)
+        protected async Task ShowDialog(Task runningTask, string title, string prompt)
         {
             await Extensions.InvokeOnUiThread(ShowProgressDialog(_parentView, title, prompt, runningTask));
         }
 
-        internal async Task ShowDialog(Action runningAction, string title, string prompt)
+        protected async Task ShowDialog(Action runningAction, string title, string prompt)
         {
             await Extensions.InvokeOnUiThread(ShowProgressDialog(_parentView, title, prompt, runningAction));
         }
 
-        internal async Task<string?> InputDialog(string title, string prompt, string? placeholder = null)
+        protected async Task<string?> InputDialog(string title, string prompt, string? placeholder = null)
         {
             return await Extensions.RunOnUIThread(() => MessageBox.InputDialog(_parentView, title, prompt, "OK", "Cancel", placeholder: placeholder));
         }
 
-        internal async Task<T?> ItemPickerDialog<T>(string title, string prompt, string label, List<T> items, T? selectedItem, string? placeholder = null)
+        protected async Task<T?> ItemPickerDialog<T>(string title, string prompt, string label, List<T> items, T? selectedItem, string? placeholder = null)
         {
             (T? item, int? _, string? _) = await Extensions.RunOnUIThread(() => PickerDialog(_parentView, title, prompt, label, items, selectedItem, placeholder));
             return item;
         }
 
-        internal async Task<int> IndexPickerDialog<T>(string title, string prompt, string label, List<T> items, T? selectedItem = default, string? placeholder = null, string? selectButton = null, string? cancelButton = null)
+        protected async Task<int> IndexPickerDialog<T>(string title, string prompt, string label, List<T> items, T? selectedItem = default, string? placeholder = null, string? selectButton = null, string? cancelButton = null)
         {
             (T? _, int? index, string? _) = await Extensions.RunOnUIThread(() => PickerDialog(_parentView, title, prompt, label, items, selectedItem, placeholder, selectButton, cancelButton));
 
