@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace AvaloniaToolbox.UI.Windows
 {
-    public class BaseWindow : ReactiveWindow<BaseViewModel>, INotifyPropertyChanged
+    public class BaseWindow : ReactiveWindow<TopLevelBaseViewModel>, INotifyPropertyChanged
     {
         protected bool _isReleasable = true;
         public BaseWindow()

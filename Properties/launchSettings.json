@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AvaloniaToolbox": {
+      "commandName": "Project"
+    },
+    "Testing": {
+      "commandName": "Project"
+    }
+  }
+}
